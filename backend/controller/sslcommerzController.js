@@ -47,14 +47,26 @@ class SSLCommerzController {
 
         const currency = req.body.currency ? req.body.currency.toUpperCase() : 'BDT'
 
+        const host = req.get('host')
+        const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
+        const baseUrl = `${protocol}://${host}`
+
         const data = {
             total_amount: Number(amount),
             currency: currency,
             tran_id: tranId,
-            success_url: sslcommerzConfig.successUrl,
-            fail_url: sslcommerzConfig.failUrl,
-            cancel_url: sslcommerzConfig.cancelUrl,
-            ipn_url: sslcommerzConfig.ipnUrl,
+            success_url: (sslcommerzConfig.successUrl && !sslcommerzConfig.successUrl.includes('localhost'))
+                ? sslcommerzConfig.successUrl
+                : `${baseUrl}/api/sslcommerz/payment/success`,
+            fail_url: (sslcommerzConfig.failUrl && !sslcommerzConfig.failUrl.includes('localhost'))
+                ? sslcommerzConfig.failUrl
+                : `${baseUrl}/api/sslcommerz/payment/fail`,
+            cancel_url: (sslcommerzConfig.cancelUrl && !sslcommerzConfig.cancelUrl.includes('localhost'))
+                ? sslcommerzConfig.cancelUrl
+                : `${baseUrl}/api/sslcommerz/payment/cancel`,
+            ipn_url: (sslcommerzConfig.ipnUrl && !sslcommerzConfig.ipnUrl.includes('localhost'))
+                ? sslcommerzConfig.ipnUrl
+                : `${baseUrl}/api/sslcommerz/payment/ipn`,
             shipping_method: 'NO',
             product_name: 'Event / Service Registration',
             product_category: 'Registration',

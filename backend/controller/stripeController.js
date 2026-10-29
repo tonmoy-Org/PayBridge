@@ -69,8 +69,8 @@ class StripeController {
                     amount: String(numAmount),
                     currency: currencyUpper,
                 },
-                success_url: `${stripeConfig.successUrl}?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: stripeConfig.cancelUrl,
+                success_url: `${(stripeConfig.successUrl && !stripeConfig.successUrl.includes('localhost')) ? stripeConfig.successUrl : `${req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.get('host')}/api/stripe/payment/success`}?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: (stripeConfig.cancelUrl && !stripeConfig.cancelUrl.includes('localhost')) ? stripeConfig.cancelUrl : `${req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'}://${req.get('host')}/api/stripe/payment/cancel`,
             })
 
             // Pre-save pending payment in MongoDB

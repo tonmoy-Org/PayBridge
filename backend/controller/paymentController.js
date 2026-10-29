@@ -47,10 +47,16 @@ class PaymentController {
         try {
             const invoiceNumber = 'Inv' + uuidv4().substring(0, 8).toUpperCase()
 
+            const host = req.get('host')
+            const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
+            const resolvedCallback = (bkashConfig.callbackUrl && !bkashConfig.callbackUrl.includes('localhost'))
+                ? bkashConfig.callbackUrl
+                : `${protocol}://${host}/api/bkash/payment/callback`
+
             const requestPayload = {
                 mode: '0011',
                 payerReference: userId ? String(userId) : 'customer',
-                callbackURL: bkashConfig.callbackUrl,
+                callbackURL: resolvedCallback,
                 amount: String(amount),
                 currency: 'BDT',
                 intent: 'sale',

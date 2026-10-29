@@ -45,7 +45,10 @@ const connectDB = async () => {
     }
     try {
         const mongoUri = process.env.MONGODB_URI || process.env.DB_URL
-        if (!mongoUri) return
+        if (!mongoUri) {
+            console.error('MongoDB connection error: Neither MONGODB_URI nor DB_URL is set')
+            return
+        }
         await mongoose.connect(mongoUri)
         isConnected = true
         console.log('MongoDB connected successfully')
