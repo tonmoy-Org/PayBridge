@@ -4,6 +4,15 @@ const userModel = require('../model/userModel')
 const authController = require('./authController')
 const stripeConfig = require('../config/stripeConfig')
 
+const resolveFrontendUrl = (req, configUrl) => {
+    if (configUrl && !configUrl.includes('localhost')) {
+        return configUrl.replace(/\/$/, '')
+    }
+    const host = req.get('host')
+    const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
+    return `${protocol}://${host}`
+}
+
 class StripeController {
     /**
      * Helper to get Stripe instance
@@ -111,7 +120,7 @@ class StripeController {
      */
     paymentSuccess = async (req, res) => {
         const { session_id } = req.query
-        const frontendUrl = stripeConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, stripeConfig.frontendUrl)
 
         if (!session_id) {
             return res.redirect(
@@ -162,7 +171,7 @@ class StripeController {
      * Stripe Payment Cancel Callback (GET)
      */
     paymentCancel = async (req, res) => {
-        const frontendUrl = stripeConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, stripeConfig.frontendUrl)
         return res.redirect(
             `${frontendUrl}/error?message=${encodeURIComponent('Payment was cancelled on Stripe')}`
         )

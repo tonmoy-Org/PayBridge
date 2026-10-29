@@ -6,6 +6,15 @@ const userModel = require('../model/userModel')
 const authController = require('./authController')
 const bkashConfig = require('../config/bkashConfig')
 
+const resolveFrontendUrl = (req, configUrl) => {
+    if (configUrl && !configUrl.includes('localhost')) {
+        return configUrl.replace(/\/$/, '')
+    }
+    const host = req.get('host')
+    const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
+    return `${protocol}://${host}`
+}
+
 class PaymentController {
     /**
      * Common headers for bKash API requests
@@ -115,7 +124,7 @@ class PaymentController {
      */
     call_back = async (req, res) => {
         const { paymentID, status } = req.query
-        const frontendUrl = bkashConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, bkashConfig.frontendUrl)
 
         if (status === 'cancel' || status === 'failure') {
             if (paymentID) {

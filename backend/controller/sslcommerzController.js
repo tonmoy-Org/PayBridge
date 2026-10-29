@@ -5,6 +5,15 @@ const userModel = require('../model/userModel')
 const authController = require('./authController')
 const sslcommerzConfig = require('../config/sslcommerzConfig')
 
+const resolveFrontendUrl = (req, configUrl) => {
+    if (configUrl && !configUrl.includes('localhost')) {
+        return configUrl.replace(/\/$/, '')
+    }
+    const host = req.get('host')
+    const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
+    return `${protocol}://${host}`
+}
+
 class SSLCommerzController {
     /**
      * Helper to get an SSLCommerzPayment instance
@@ -132,7 +141,7 @@ class SSLCommerzController {
         const tran_id = req.body?.tran_id || req.query?.tran_id
         const val_id = req.body?.val_id || req.query?.val_id
         const amount = req.body?.amount || req.query?.amount
-        const frontendUrl = sslcommerzConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, sslcommerzConfig.frontendUrl)
 
         try {
             const sslcz = this.getSSLInstance()
@@ -197,7 +206,7 @@ class SSLCommerzController {
     paymentFail = async (req, res) => {
         const tran_id = req.body?.tran_id || req.query?.tran_id
         const errorMsg = req.body?.error || req.query?.error || 'Payment failed via SSLCommerz'
-        const frontendUrl = sslcommerzConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, sslcommerzConfig.frontendUrl)
 
         try {
             if (tran_id) {
@@ -220,7 +229,7 @@ class SSLCommerzController {
      */
     paymentCancel = async (req, res) => {
         const tran_id = req.body?.tran_id || req.query?.tran_id
-        const frontendUrl = sslcommerzConfig.frontendUrl
+        const frontendUrl = resolveFrontendUrl(req, sslcommerzConfig.frontendUrl)
 
         try {
             if (tran_id) {
