@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
+import { getBackendUrl } from '../config/api'
 
 export default function SuccessPage() {
   const queryParams = new URLSearchParams(window.location.search)
@@ -32,7 +33,7 @@ export default function SuccessPage() {
   const [showPassword, setShowPassword] = useState(true)
   const [isLoggingIn, setIsLoggingIn] = useState(false)
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+  const backendUrl = getBackendUrl()
 
   useEffect(() => {
     toast.success(`Payment of ${amount} ${currency} completed successfully!`, {

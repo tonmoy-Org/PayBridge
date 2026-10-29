@@ -11,8 +11,9 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { auth, googleProvider, appleProvider } from '../firebase/firebaseConfig'
+import { getBackendUrl } from '../config/api'
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+const backendUrl = getBackendUrl()
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {

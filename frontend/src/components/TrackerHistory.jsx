@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify'
+import { getBackendUrl } from '../config/api'
 
 export default function TrackerHistory() {
   const { user, token, role } = useAuth()
@@ -42,7 +43,7 @@ export default function TrackerHistory() {
   const [copiedId, setCopiedId] = useState(null)
   const [selectedReceipt, setSelectedReceipt] = useState(null)
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+  const backendUrl = getBackendUrl()
 
   const fetchHistory = async () => {
     if (!token) return

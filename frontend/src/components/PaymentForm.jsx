@@ -15,6 +15,7 @@ import {
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
 import { COUNTRIES, CountryFlag } from '../utils/countries'
+import { getBackendUrl } from '../config/api'
 
 const UNIVERSITIES = [
   { value: "1", name: "American International University Bangladesh (AIUB)" },
@@ -93,7 +94,7 @@ export default function PaymentForm() {
       c.code.toLowerCase().includes(countrySearch.toLowerCase())
   )
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+  const backendUrl = getBackendUrl()
 
   const checkExistingAccount = async (emailToCheck) => {
     const cleanEmail = (emailToCheck || '').trim()
