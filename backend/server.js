@@ -65,7 +65,7 @@ app.use('/api', require('./routes/routes'))
 
 app.get('/', (req, res) => res.send('server is running'))
 
-if (!process.env.VERCEL) {
+if (require.main === module) {
     const port = process.env.PORT || 5000
     app.listen(port, () => console.log(`Server listening on port ${port}!`))
 }
