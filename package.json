@@ -1,0 +1,11 @@
+{
+  "name": "bkash-payment-react-node",
+  "version": "1.0.0",
+  "description": "bKash payment integration with Vite + React + Tailwind CSS frontend and Node.js/Express backend",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && node server.js",
+    "frontend": "cd frontend && npm run dev"
+  }
+}

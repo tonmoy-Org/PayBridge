@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --radius-xs: 5px;
+  --radius-sm: 5px;
+  --radius-md: 5px;
+  --radius-lg: 5px;
+  --radius-xl: 5px;
+  --radius-2xl: 5px;
+  --radius-3xl: 5px;
+  --radius: 5px;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1f2937;
+    background-color: #f9fafb;
+    margin: 0;
+  }
+}
+
+/* Global 5px border-radius across the full project */
+.rounded,
+.rounded-xs,
+.rounded-sm,
+.rounded-md,
+.rounded-lg,
+.rounded-xl,
+.rounded-2xl,
+.rounded-3xl,
+button,
+input,
+select,
+textarea {
+  border-radius: 5px !important;
+}
+
+.rounded-l,
+.rounded-l-lg,
+.rounded-l-md,
+.rounded-l-xl {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rounded-r,
+.rounded-r-lg,
+.rounded-r-md,
+.rounded-r-xl {
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.taka-symbol {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-weight: 700;
+}
+
+/* Remove number input spin buttons (up/down arrows) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+/* Hide scrollbar globally across all browsers while retaining scrolling */
+html,
+body,
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
