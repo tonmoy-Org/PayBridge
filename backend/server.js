@@ -1,7 +1,15 @@
 const path = require('path')
+const dns = require('dns')
 const dotEnv = require('dotenv')
 dotEnv.config({ path: path.join(__dirname, '.env') })
 dotEnv.config()
+
+// Ensure DNS resolution works reliably for MongoDB Atlas SRV records on Windows/local environments
+try {
+    dns.setServers(['8.8.8.8', '1.1.1.1'])
+} catch (dnsErr) {
+    // ignore if environment restricts custom DNS
+}
 
 const express = require('express')
 const mongoose = require('mongoose')
@@ -31,7 +39,8 @@ app.use('/api', require('./routes/routes'))
 
 const db = async () => {
     try {
-        await mongoose.connect(process.env.DB_URL)
+        const mongoUri = process.env.MONGODB_URI || process.env.DB_URL
+        await mongoose.connect(mongoUri)
         console.log('MongoDB connected successfully')
     } catch (error) {
         console.error('MongoDB connection error:', error.message)
@@ -42,4 +51,7 @@ const port = process.env.PORT || 5000
 
 app.get('/', (req, res) => res.send('server is running'))
 
-app.listen(port, () => console.log(`Server listening on port ${port}!`))
+app.listen(port, () => console.log(`Server listening on port ${port}!`))
+
+module.exports = app
+
