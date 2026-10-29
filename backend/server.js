@@ -65,10 +65,8 @@ app.use('/api', require('./routes/routes'))
 
 app.get('/', (req, res) => res.send('server is running'))
 
-if (require.main === module) {
-    const port = process.env.PORT || 5000
-    app.listen(port, () => console.log(`Server listening on port ${port}!`))
-}
+const port = process.env.PORT || 5000
+app.listen(port, () => console.log(`Server listening on port ${port}!`))
 
 module.exports = app
 
