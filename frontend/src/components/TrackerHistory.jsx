@@ -112,6 +112,12 @@ export default function TrackerHistory() {
             SSLCommerz
           </span>
         )
+      case 'shurjopay':
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-[4px] text-xs font-semibold bg-emerald-50 text-[#22a048] border border-emerald-200">
+            shurjoPay
+          </span>
+        )
       case 'stripe':
         return (
           <span className="inline-flex items-center px-2 py-0.5 rounded-[4px] text-xs font-semibold bg-purple-50 text-[#635BFF] border border-purple-200">
@@ -201,7 +207,7 @@ export default function TrackerHistory() {
         <div className="bg-white p-4 rounded-[5px] border border-gray-200 shadow-2xs">
           <p className="text-xs font-medium text-gray-500">Total BDT Volume</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">৳{(stats.totalVolumeBDT || 0).toLocaleString()}</p>
-          <p className="text-[11px] text-gray-400 mt-1">bKash & SSLCommerz</p>
+          <p className="text-[11px] text-gray-400 mt-1">bKash, SSLCommerz & shurjoPay</p>
         </div>
 
         <div className="bg-white p-4 rounded-[5px] border border-gray-200 shadow-2xs">
@@ -239,6 +245,7 @@ export default function TrackerHistory() {
               <option value="all">All Gateways</option>
               <option value="bkash">bKash</option>
               <option value="sslcommerz">SSLCommerz</option>
+              <option value="shurjopay">shurjoPay</option>
               <option value="stripe">Stripe</option>
             </select>
           </div>

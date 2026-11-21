@@ -27,7 +27,7 @@ const paymentSchema = new Schema({
     },
     gateway: {
         type: String,
-        enum: ['bkash', 'sslcommerz', 'stripe'],
+        enum: ['bkash', 'sslcommerz', 'stripe', 'shurjopay'],
         default: 'bkash',
     },
     status: {
@@ -36,6 +36,12 @@ const paymentSchema = new Schema({
         default: 'Completed',
     },
     orderId: {
+        type: String,
+    },
+    sp_order_id: {
+        type: String,
+    },
+    bank_trx_id: {
         type: String,
     },
     customerEmail: {

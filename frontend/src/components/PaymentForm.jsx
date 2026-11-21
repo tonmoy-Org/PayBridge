@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
 import { COUNTRIES, CountryFlag } from '../utils/countries'
 import { getBackendUrl } from '../config/api'
+import ShurjopayLogo from './ShurjopayLogo'
 
 const UNIVERSITIES = [
   { value: "1", name: "American International University Bangladesh (AIUB)" },
@@ -317,6 +318,25 @@ export default function PaymentForm() {
           window.location.href = response.data.url
         } else {
           const err = response.data?.error || 'Failed to retrieve payment URL from Stripe.'
+          setApiError(err)
+          toast.error(err)
+        }
+      } else if (paymentGateway === 'shurjopay') {
+        const response = await axios.post(
+          `${backendUrl}/api/shurjopay/payment/initiate`,
+          {
+            amount: paymentAmount,
+            currency: currency,
+            userId: resolvedPaymentUserId,
+            ...registrationPayload,
+          },
+          { withCredentials: true }
+        )
+
+        if (response.data && response.data.checkout_url) {
+          window.location.href = response.data.checkout_url
+        } else {
+          const err = response.data?.error || 'Failed to retrieve payment URL from shurjoPay.'
           setApiError(err)
           toast.error(err)
         }
@@ -678,7 +698,7 @@ export default function PaymentForm() {
           <label className="block text-xs font-medium text-gray-600 mb-2">
             Select Payment Method
           </label>
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             {/* bKash Gateway */}
             <div
               onClick={() => {
@@ -751,6 +771,38 @@ export default function PaymentForm() {
               </div>
             </div>
 
+            {/* shurjoPay Gateway */}
+            <div
+              onClick={() => {
+                if (currency !== 'BDT') {
+                  handleCurrencyChange('BDT')
+                }
+                setPaymentGateway('shurjopay')
+              }}
+              title="Pay via shurjoPay (BDT)"
+              className={`relative flex items-center px-2.5 sm:px-3 py-2.5 border rounded-[5px] transition-all cursor-pointer ${paymentGateway === 'shurjopay'
+                ? 'border-[#22a048] bg-[#22a048]/5 shadow-2xs'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
+                }`}
+            >
+              <input
+                type="radio"
+                name="payment_method"
+                value="shurjopay"
+                checked={paymentGateway === 'shurjopay'}
+                onChange={() => {
+                  if (currency !== 'BDT') {
+                    handleCurrencyChange('BDT')
+                  }
+                  setPaymentGateway('shurjopay')
+                }}
+                className="h-4 w-4 text-[#22a048] accent-[#22a048] focus:ring-[#22a048] shrink-0 cursor-pointer"
+              />
+              <div className="flex-1 flex justify-center items-center pl-1 sm:pl-2">
+                <ShurjopayLogo className="h-5 sm:h-6 max-h-6 w-auto" />
+              </div>
+            </div>
+
             {/* Stripe Gateway */}
             <div
               onClick={() => {
@@ -815,18 +867,22 @@ export default function PaymentForm() {
               ? 'bg-pink-600 hover:bg-pink-700 disabled:bg-pink-400 focus:ring-pink-500'
               : paymentGateway === 'sslcommerz'
                 ? 'bg-[#2A5DAB] hover:bg-[#224b8a] disabled:bg-[#2A5DAB]/60 focus:ring-[#2A5DAB]'
-                : 'bg-black hover:bg-neutral-800 disabled:bg-black/60 focus:ring-black'
+                : paymentGateway === 'shurjopay'
+                  ? 'bg-[#22a048] hover:bg-[#1b823a] disabled:bg-[#22a048]/60 focus:ring-[#22a048]'
+                  : 'bg-black hover:bg-neutral-800 disabled:bg-black/60 focus:ring-black'
               }`}
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Connecting to {paymentGateway === 'bkash' ? 'bKash' : paymentGateway === 'sslcommerz' ? 'SSLCommerz' : 'Stripe'}...
+                Connecting to {paymentGateway === 'bkash' ? 'bKash' : paymentGateway === 'sslcommerz' ? 'SSLCommerz' : paymentGateway === 'shurjopay' ? 'shurjoPay' : 'Stripe'}...
               </>
             ) : paymentGateway === 'bkash' ? (
               'Proceed to bKash Payment'
             ) : paymentGateway === 'sslcommerz' ? (
               'Proceed to SSLCommerz Payment'
+            ) : paymentGateway === 'shurjopay' ? (
+              'Proceed to shurjoPay Payment'
             ) : (
               'Proceed to Stripe Payment'
             )}

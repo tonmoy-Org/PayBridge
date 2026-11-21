@@ -1,6 +1,6 @@
 # PayBridge
 
-PayBridge is a multi-gateway payment processing application built with Node.js, Express, MongoDB, React, and Vite. It provides standardized integrations for bKash, SSLCommerz, and Stripe, alongside transaction tracking and user authentication.
+PayBridge is a multi-gateway payment processing application built with Node.js, Express, MongoDB, React, and Vite. It provides standardized integrations for bKash, SSLCommerz, shurjoPay, and Stripe, alongside transaction tracking and user authentication.
 
 ---
 
@@ -9,6 +9,7 @@ PayBridge is a multi-gateway payment processing application built with Node.js, 
 - **Payment Gateways**:
   - **bKash**: Tokenized checkout (grant token, create payment, callback execution, and refund).
   - **SSLCommerz**: Session initiation, transaction validation, callback handling (success, fail, cancel), and IPN support.
+  - **shurjoPay**: Token authorization, secret-pay checkout initiation, callback verification, and cancel handling.
   - **Stripe**: Hosted Checkout session creation and completion handling.
 - **Transaction Tracker**: Audit log of payment events, transaction statuses, and payer metadata.
 - **Authentication**: JWT-based authentication with role-based access control.
@@ -64,6 +65,7 @@ Key environment variables:
 - `FRONTEND_URL`: Client application URL (default: `http://localhost:3000`)
 - `BKASH_*`: bKash API credentials and endpoint URLs
 - `SSLCOMMERZ_*`: Store ID, Store Password, and mode (`SSLCOMMERZ_LIVE_MODE=false`)
+- `SP_*`: shurjoPay endpoint, username, password, and prefix
 - `STRIPE_*`: Publishable and secret keys
 
 ### 2. Frontend Configuration

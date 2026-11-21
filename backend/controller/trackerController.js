@@ -161,7 +161,10 @@ exports.getTrackerDetail = async (req, res) => {
       $or: [
         { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null },
         { trxID: id },
-        { paymentID: id }
+        { paymentID: id },
+        { orderId: id },
+        { sp_order_id: id },
+        { bank_trx_id: id }
       ]
     }).lean()
 

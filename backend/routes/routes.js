@@ -2,6 +2,7 @@ const router = require('express').Router()
 const paymentController = require('../controller/paymentController')
 const sslcommerzController = require('../controller/sslcommerzController')
 const stripeController = require('../controller/stripeController')
+const shurjopayController = require('../controller/shurjopayController')
 const trackerController = require('../controller/trackerController')
 const authController = require('../controller/authController')
 const middleware = require('../middleware/middleware')
@@ -30,6 +31,14 @@ router.post('/stripe/payment/create', stripeController.createCheckoutSession)
 router.post('/stripe/payment/create-checkout-session', stripeController.createCheckoutSession)
 router.get('/stripe/payment/success', stripeController.paymentSuccess)
 router.get('/stripe/payment/cancel', stripeController.paymentCancel)
+
+// shurjoPay Routes
+router.post('/shurjopay/payment/initiate', shurjopayController.initiatePayment)
+router.all('/shurjopay/payment/callback', shurjopayController.handleCallback)
+router.all('/shurjopay/payment/cancel', shurjopayController.paymentCancel)
+router.get('/shurjopay/payment/verify/:order_id', shurjopayController.verifyPaymentStatus)
+// Fallback alias for standalone shurjoPay callbacks
+router.all('/payment/callback', shurjopayController.handleCallback)
 
 // Tracker History Routes
 router.get('/tracker/history', requireAuth, trackerController.getTrackerHistory)

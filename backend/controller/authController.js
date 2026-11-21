@@ -192,7 +192,14 @@ class AuthController {
       }
 
       const payment = await paymentModel.findOne({
-        $or: [{ trxID: trxID }, { paymentID: trxID }, { val_id: trxID }],
+        $or: [
+          { trxID: trxID },
+          { paymentID: trxID },
+          { val_id: trxID },
+          { orderId: trxID },
+          { sp_order_id: trxID },
+          { bank_trx_id: trxID },
+        ],
       })
 
       if (!payment) {
